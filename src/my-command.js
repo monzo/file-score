@@ -1,5 +1,4 @@
 import sketch from 'sketch'
-// documentation: https://developer.sketchapp.com/reference/api/
 
 const doc = sketch.getSelectedDocument()
 const pages = doc.pages
@@ -29,5 +28,5 @@ export default function() {
   const symbolsCount = doc.getSymbols().length
   const symbolsPercentage = Math.round((symbolsCount / layerCount) * 100)
 
-  sketch.UI.message(`You're using ${symbolsCount} symbols (${symbolsCount}/${layerCount}) – ${symbolsPercentage}% ✨`)
+  sketch.UI.message(`You're using ${symbolsCount} symbols (${symbolsCount}/${layerCount}) – ${symbolsPercentage}%`)
 }
