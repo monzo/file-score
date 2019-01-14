@@ -11,10 +11,14 @@ const ignoreTypes = [
 
 export default function() {
   let layerCount = 0
+  let symbolsCount = 0
 
   function countLayers(layerType) {
     if (!ignoreTypes.includes(layerType.type)) {
       layerCount += 1
+    }
+    if (layerType.type == 'SymbolInstance') {
+      symbolsCount += 1
     }
 
     if (layerType.layers && layerType.layers.length) {
@@ -25,7 +29,6 @@ export default function() {
 
   pages.forEach(countLayers)
 
-  const symbolsCount = doc.getSymbols().length
   const symbolsPercentage = Math.round((symbolsCount / layerCount) * 100)
 
   sketch.UI.message(`You're using ${symbolsCount} symbols (${symbolsCount}/${layerCount}) – ${symbolsPercentage}%`)
