@@ -17,7 +17,8 @@ export default function() {
     if (!ignoreTypes.includes(layerType.type)) {
       layerCount += 1
     }
-    if (layerType.type == 'SymbolInstance') {
+    if (layerType.type == 'SymbolInstance'
+      || (layerType.type == 'Text' && layerType.sharedStyleId)) {
       symbolsCount += 1
     }
 
