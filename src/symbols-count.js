@@ -13,12 +13,14 @@ export default function() {
   let layerCount = 0
   let symbolsCount = 0
 
-  function countLayers(layerType) {
-    if (!ignoreTypes.includes(layerType.type)) {
+  pages.forEach(function countLayers(layerType) {
+    if (!ignoreTypes.includes(layerType.type)
+      && layerType.sketchObject.class() != "MSSliceLayer") {
       layerCount += 1
     }
+    // Count symbols and layers with shared styles
     if (layerType.type == 'SymbolInstance'
-      || (layerType.type == 'Text' && layerType.sharedStyleId)) {
+      || layerType.sharedStyleId) {
       symbolsCount += 1
     }
 
@@ -26,9 +28,7 @@ export default function() {
       // iterate through the children
       layerType.layers.forEach(countLayers)
     }
-  }
-
-  pages.forEach(countLayers)
+  })
 
   const symbolsPercentage = Math.round((symbolsCount / layerCount) * 100)
 
