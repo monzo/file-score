@@ -14,8 +14,10 @@ export default function() {
   let symbolsCount = 0
 
   pages.forEach(function countLayers(layerType) {
+    // Ignore types defined above, slices, and masks.
     if (!ignoreTypes.includes(layerType.type)
-      && layerType.sketchObject.class() != "MSSliceLayer") {
+      && layerType.sketchObject.class() != "MSSliceLayer"
+      && !layerType.sketchObject.hasClippingMask()) {
       layerCount += 1
     }
     // Count symbols and layers with shared styles
