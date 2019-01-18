@@ -6,7 +6,8 @@ const pages = doc.pages
 const ignoreTypes = [
   'Page',
   'Artboard',
-  'Group'
+  'Group',
+  'SymbolMaster'
 ]
 
 export default function() {
@@ -26,7 +27,9 @@ export default function() {
       symbolsCount += 1
     }
 
-    if (layerType.layers && layerType.layers.length) {
+    // Don't iterate through symbol masters (in case there are unlinked symbols)
+    if (layerType.layers && layerType.layers.length
+        && layerType.type != 'SymbolMaster') {
       // iterate through the children
       layerType.layers.forEach(countLayers)
     }
