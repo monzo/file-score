@@ -34,5 +34,7 @@ export default function() {
 
   const symbolsPercentage = Math.round((symbolsCount / layerCount) * 100)
 
-  sketch.UI.message(`You're using ${symbolsCount} symbols (${symbolsCount}/${layerCount}) – ${symbolsPercentage}%`)
+  const message = (layerCount == 0) ? `Add some layers first! Get creative`
+    : `You're using ${symbolsCount} symbols (${symbolsCount}/${layerCount}) – ${symbolsPercentage}%`
+  sketch.UI.message(message)
 }
