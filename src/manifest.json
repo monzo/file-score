@@ -4,7 +4,6 @@
   "author": "Monzo",
   "authorEmail" : "kavi@monzo.com",
   "identifier": "com.monzo.design.file-score",
-  "version": "0.1.0",
   "homepage": "https://github.com/monzo/file-score",
   "compatibleVersion": 3,
   "bundleVersion": 1,
