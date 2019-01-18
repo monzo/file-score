@@ -12,6 +12,10 @@
       "assets/**/*"
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monzo/file-score.git"
+  },
   "scripts": {
     "build": "skpm-build",
     "watch": "skpm-build --watch",
