@@ -16,7 +16,7 @@ export default function() {
 
   pages.forEach(function countLayers(layer) {
     const layerType = layer.type
-    console.log(`${layerType}`)
+
     // We want to ignore layers types defined above, slices, masks etc.
     if (shouldCountLayer(layer)) {
       layerCount += 1
@@ -52,8 +52,8 @@ function shouldCountLayer(layer) {
   if (layer.sketchObject.class() == "MSSliceLayer") {
     shouldCount = false
   }
-  // Masks
-  if (layer.sketchObject.hasClippingMask()) {
+  // Masks (that aren't symbols)
+  if (layer.sketchObject.hasClippingMask() && !layer.sharedStyleId) {
     shouldCount = false
   }
   // Shape paths that have a parent with a layer style
