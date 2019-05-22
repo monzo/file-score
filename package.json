@@ -23,7 +23,8 @@
     "postinstall": "npm run build && skpm-link"
   },
   "devDependencies": {
-    "@skpm/builder": "^0.5.11"
+    "@skpm/builder": "^0.5.11",
+    "@skpm/path": "^0.1.4"
   },
   "author": "Kavi Dhokia <kavi@monzo.com>"
 }

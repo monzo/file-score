@@ -1,5 +1,7 @@
 import sketch from 'sketch';
-import fs from 'fs';
+import path from '@skpm/path';
+
+import {env, config} from './config';
 
 const doc = sketch.getSelectedDocument();
 const pages = doc.pages;
@@ -36,6 +38,17 @@ export default function() {
       ? `Add some layers first! Get creative`
       : `You're using ${symbolsCount} symbols (${symbolsCount}/${layerCount}) – ${symbolsPercentage}%`;
   sketch.UI.message(message);
+
+  const fileName = path.parse(doc.path).base;
+
+  const dataToTrack = {
+    filename: decodeURI(fileName),
+    id: doc.id,
+    percentage: symbolsPercentage,
+    totalSymbolsCount: symbolsCount,
+  };
+
+  track(dataToTrack);
 }
 
 function shouldCountLayer(layer) {
@@ -45,14 +58,17 @@ function shouldCountLayer(layer) {
   if (ignoreTypes.includes(layerType)) {
     shouldCount = false;
   }
+
   // Slices
   if (layer.sketchObject.class() == 'MSSliceLayer') {
     shouldCount = false;
   }
+
   // Masks (that aren't symbols)
   if (layer.sketchObject.hasClippingMask() && !layer.sharedStyleId) {
     shouldCount = false;
   }
+
   // Shape paths that have a parent with a layer style
   if (layerType == 'ShapePath' && layer.parent.sharedStyleId) {
     shouldCount = false;
@@ -65,4 +81,19 @@ function shouldCountSymbol(layer) {
     return true;
   }
   return false;
+}
+
+function track({filename, id, percentage}) {
+  fetch(`${config[env].api}/design-platform-analytics/file-score`, {
+    method: 'POST',
+    body: JSON.stringify({
+      token: config[env].token,
+      file_name: filename,
+      file_id: id,
+      score_percentage: percentage,
+    }),
+  })
+    .then(response => response.text())
+    .then(text => console.log(text))
+    .catch(e => console.error(e));
 }

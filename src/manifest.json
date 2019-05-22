@@ -2,7 +2,7 @@
   "name": "File Score",
   "description": "A plugin to tell you some stats about how clean your Sketch file is",
   "author": "Monzo",
-  "authorEmail" : "kavi@monzo.com",
+  "authorEmail": "kavi@monzo.com",
   "identifier": "com.monzo.design.file-score",
   "homepage": "https://github.com/monzo/file-score",
   "compatibleVersion": 3,
@@ -17,9 +17,7 @@
     }
   ],
   "menu": {
-    "title": "💯 File Score",
-    "items": [
-      "symbols-count"
-    ]
+    "title": "💯 File Score (Dev)",
+    "items": ["symbols-count"]
   }
 }
