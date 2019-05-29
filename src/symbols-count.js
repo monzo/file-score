@@ -47,7 +47,7 @@ export default async function() {
     file_name: decodeURI(fileName),
     file_id: doc.id,
     score_percentage: symbolsPercentage,
-    totalSymbolsCount: symbolsCount,
+    total_symbols_count: symbolsCount,
   });
 
   if (trackingRequest.result === 200) {
