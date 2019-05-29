@@ -1,14 +1,16 @@
-import sketch from 'sketch';
+import Sketch from 'sketch';
 import path from '@skpm/path';
+import FormData from 'sketch-polyfill-fetch/lib/form-data';
 
-import {env, config} from './config';
+import {SECRET_NAME, TOKEN_NAME, API_ENDPOINT, CLIENT_ID} from './config';
+import {refresh} from './authenticate';
 
-const doc = sketch.getSelectedDocument();
+const doc = Sketch.getSelectedDocument();
 const pages = doc.pages;
 
 const ignoreTypes = ['Page', 'Artboard', 'Group', 'SymbolMaster'];
 
-export default function() {
+export default async function() {
   let layerCount = 0;
   let symbolsCount = 0;
 
@@ -37,18 +39,22 @@ export default function() {
     layerCount == 0
       ? `Add some layers first! Get creative`
       : `You're using ${symbolsCount} symbols (${symbolsCount}/${layerCount}) – ${symbolsPercentage}%`;
-  sketch.UI.message(message);
+  Sketch.UI.message(message);
 
   const fileName = path.parse(doc.path).base;
 
-  const dataToTrack = {
-    filename: decodeURI(fileName),
-    id: doc.id,
-    percentage: symbolsPercentage,
+  const trackingRequest = await track({
+    file_name: decodeURI(fileName),
+    file_id: doc.id,
+    score_percentage: symbolsPercentage,
     totalSymbolsCount: symbolsCount,
-  };
+  });
 
-  track(dataToTrack);
+  if (trackingRequest.result === 200) {
+    Sketch.UI.message(`🖲 ${message}`);
+  } else {
+    Sketch.UI.message(message);
+  }
 }
 
 function shouldCountLayer(layer) {
@@ -83,17 +89,41 @@ function shouldCountSymbol(layer) {
   return false;
 }
 
-function track({filename, id, percentage}) {
-  fetch(`${config[env].api}/design-platform-analytics/file-score`, {
-    method: 'POST',
-    body: JSON.stringify({
-      token: config[env].token,
-      file_name: filename,
-      file_id: id,
-      score_percentage: percentage,
-    }),
-  })
-    .then(response => response.text())
-    .then(text => console.log(text))
-    .catch(e => console.error(e));
-}
+const track = async ({
+  file_name,
+  file_id,
+  score_percentage,
+  total_symbols_count,
+}) => {
+  const storedSecret = Sketch.Settings.settingForKey(SECRET_NAME);
+  const storedToken = Sketch.Settings.settingForKey(TOKEN_NAME);
+
+  const res = await fetch(
+    `${API_ENDPOINT}/design-platform-analytics/file-score`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        file_name: file_name,
+        file_id: file_id,
+        score_percentage: score_percentage,
+        total_symbols_count: total_symbols_count,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${storedToken}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    const {_value} = res.json();
+    if (_value.code === 'bad_request.access_token.expired') {
+      await refresh();
+    }
+    throw new Error('HTTP error ' + res.status);
+  } else {
+    return {
+      result: 200,
+    };
+  }
+};

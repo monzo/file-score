@@ -14,10 +14,15 @@
       "identifier": "symbols-count",
       "script": "./symbols-count.js",
       "shortcut": "ctrl shift s"
+    },
+    {
+      "name": "Authenticate (Monzo Internal)",
+      "identifier": "authenticate-for-analytics",
+      "script": "./authenticate.js"
     }
   ],
   "menu": {
     "title": "💯 File Score (Dev)",
-    "items": ["symbols-count"]
+    "items": ["symbols-count", "authenticate-for-analytics"]
   }
 }

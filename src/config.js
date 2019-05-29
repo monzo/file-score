@@ -1,14 +1,8 @@
-export const env = 'local';
+/**
+ * Shared configuration
+ */
+export const TOKEN_NAME = 'monzo-file-score-token';
+export const SECRET_NAME = 'monzo-file-score-secret';
 
-export const config = {
-  local: {
-    api: 'http://localhost:8000',
-    token: '65565F273A9D944BCF9F4CA6B7C6C',
-  },
-  staging: {
-    api: 'https://api.tools.s101.nonprod-ffs.io',
-  },
-  production: {
-    api: 'https://api.monzo.com',
-  },
-};
+export const API_ENDPOINT = 'https://api.monzo.com';
+export const CLIENT_ID = '';
