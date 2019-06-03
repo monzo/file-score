@@ -8,6 +8,7 @@ export default function track({
   file_id,
   score_percentage,
   total_symbols_count,
+  total_layers_count,
 }) {
   const storedSecret = Sketch.Settings.settingForKey(SECRET_NAME);
   const storedToken = Sketch.Settings.settingForKey(TOKEN_NAME);
@@ -19,6 +20,7 @@ export default function track({
       file_id: file_id,
       score_percentage: score_percentage,
       total_symbols_count: total_symbols_count,
+      total_layers_count: total_layers_count,
     }),
     headers: {
       'Content-Type': 'application/json',

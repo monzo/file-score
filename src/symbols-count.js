@@ -50,6 +50,7 @@ export default async function onRun() {
       file_id: doc.id,
       score_percentage: symbolsPercentage,
       total_symbols_count: symbolsCount,
+      total_layers_count: layerCount,
     });
 
     if (trackingRequest.result === 200) {
