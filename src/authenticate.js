@@ -8,10 +8,10 @@ import {SECRET_NAME, TOKEN_NAME, API_ENDPOINT, CLIENT_ID} from './config';
  */
 export default () => {
   Sketch.UI.getInputFromUser(
-    'Please provide the secret token',
+    'Please enter the token beginning "mnzpub."',
     {
       initialValue: '',
-      description: 'This is used to track the file scores of Monzo libraries',
+      description: 'This only needs to be done once',
     },
     async (err, value) => {
       if (err) return;
@@ -22,7 +22,10 @@ export default () => {
 
       if (access_token) {
         Sketch.Settings.setSettingForKey(TOKEN_NAME, access_token);
-        Sketch.UI.message('Access token saved');
+        Sketch.Settings.setSettingForKey(SECRET_NAME, value);
+        Sketch.UI.message('🗝Token saved');
+      } else {
+        Sketch.UI.message('🤔Hmm we had a problem authenticating you');
       }
     }
   );
@@ -48,8 +51,6 @@ export const authenticate = async secret => {
 
   if (!res.ok) {
     await refresh();
-    Sketch.UI.message('We were unable to authenticate you');
-    throw new Error('HTTP error ' + res.status);
   }
 
   return await res.json();
@@ -79,7 +80,6 @@ export const refresh = async () => {
 
   if (!res.ok) {
     Sketch.UI.message('We were unable to re-authenticate you');
-    throw new Error('HTTP error ' + res.status);
   }
 
   return await res.json();

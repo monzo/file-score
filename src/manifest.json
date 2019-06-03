@@ -16,13 +16,23 @@
       "shortcut": "ctrl shift s"
     },
     {
-      "name": "Authenticate (Monzo Internal)",
+      "name": "Authenticate",
       "identifier": "authenticate-for-analytics",
       "script": "./authenticate.js"
+    },
+    {
+      "name": "on-document-save",
+      "script": "./symbols-count.js",
+      "identifier": "on-document-savve",
+      "handlers": {
+        "actions": {
+          "DocumentSaved": "onRun"
+        }
+      }
     }
   ],
   "menu": {
-    "title": "💯 File Score (Dev)",
+    "title": "💯 File Score (Metrics Version)",
     "items": ["symbols-count", "authenticate-for-analytics"]
   }
 }

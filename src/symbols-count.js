@@ -10,7 +10,7 @@ const pages = doc.pages;
 
 const ignoreTypes = ['Page', 'Artboard', 'Group', 'SymbolMaster'];
 
-export default async function() {
+export default async function onRun() {
   let layerCount = 0;
   let symbolsCount = 0;
 
@@ -43,15 +43,19 @@ export default async function() {
 
   const fileName = path.parse(doc.path).base;
 
-  const trackingRequest = await track({
-    file_name: decodeURI(fileName),
-    file_id: doc.id,
-    score_percentage: symbolsPercentage,
-    total_symbols_count: symbolsCount,
-  });
+  if (fileName) {
+    const trackingRequest = await track({
+      file_name: decodeURI(fileName).replace('.sketch', ''),
+      file_id: doc.id,
+      score_percentage: symbolsPercentage,
+      total_symbols_count: symbolsCount,
+    });
 
-  if (trackingRequest.result === 200) {
-    Sketch.UI.message(`🖲 ${message}`);
+    if (trackingRequest.result === 200) {
+      Sketch.UI.message(`🖲 ${message}`);
+    } else {
+      Sketch.UI.message(message);
+    }
   } else {
     Sketch.UI.message(message);
   }
@@ -117,10 +121,9 @@ const track = async ({
 
   if (!res.ok) {
     const {_value} = res.json();
-    if (_value.code === 'bad_request.access_token.expired') {
-      await refresh();
+    if (_value.code === 'unauthorized.bad_access_token.expired') {
+      return refresh();
     }
-    throw new Error('HTTP error ' + res.status);
   } else {
     return {
       result: 200,
