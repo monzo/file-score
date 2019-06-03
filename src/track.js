@@ -3,30 +3,21 @@ import Sketch from 'sketch';
 import {SECRET_NAME, TOKEN_NAME, API_ENDPOINT} from './config';
 import {refresh} from './authenticate';
 
-export default function track({
-  file_name,
-  file_id,
-  score_percentage,
-  total_symbols_count,
-  total_layers_count,
-}) {
+export default async function track(data) {
   const storedSecret = Sketch.Settings.settingForKey(SECRET_NAME);
   const storedToken = Sketch.Settings.settingForKey(TOKEN_NAME);
 
-  const res = fetch(`${API_ENDPOINT}/design-platform-analytics/file-score`, {
-    method: 'POST',
-    body: JSON.stringify({
-      file_name: file_name,
-      file_id: file_id,
-      score_percentage: score_percentage,
-      total_symbols_count: total_symbols_count,
-      total_layers_count: total_layers_count,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${storedToken}`,
-    },
-  });
+  const res = await fetch(
+    `${API_ENDPOINT}/design-platform-analytics/file-score`,
+    {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${storedToken}`,
+      },
+    }
+  );
 
   if (!res.ok) {
     const {_value} = res.json();
@@ -34,8 +25,6 @@ export default function track({
       return refresh();
     }
   } else {
-    return {
-      result: 200,
-    };
+    return res;
   }
 }

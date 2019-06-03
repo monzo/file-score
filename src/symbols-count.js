@@ -45,22 +45,22 @@ export default async function onRun() {
   const fileName = path.parse(doc.path).base;
 
   if (fileName) {
-    const trackingRequest = track({
+    const data = {
       file_name: decodeURI(fileName).replace('.sketch', ''),
       file_id: doc.id,
       score_percentage: symbolsPercentage,
       total_symbols_count: symbolsCount,
       total_layers_count: layerCount,
-    });
+    };
 
-    if (trackingRequest.result === 200) {
-      Sketch.UI.message(`🖲 ${message}`);
-    } else {
-      Sketch.UI.message(message);
+    const trackingRequest = await track(data);
+
+    if (trackingRequest.status === 200) {
+      return Sketch.UI.message(`🖲 ${message}`);
     }
-  } else {
-    Sketch.UI.message(message);
   }
+
+  return Sketch.UI.message(message);
 }
 
 function shouldCountLayer(layer) {
