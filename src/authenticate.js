@@ -40,14 +40,7 @@ export const authenticate = async secret => {
   body.append('client_id', CLIENT_ID);
   body.append('client_secret', secret);
 
-  const res = await fetch(`${API_ENDPOINT}/oauth2/token`, {
-    method: 'POST',
-    body: body,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      Accept: 'application/json',
-    },
-  });
+  const res = await authRequest(body);
 
   if (!res.ok) {
     await refresh();
@@ -69,7 +62,20 @@ export const refresh = async () => {
   body.append('refresh_token', refreshToken);
   body.append('client_secret', secret);
 
-  const res = await fetch(`${API_ENDPOINT}/oauth2/token`, {
+  const res = await authRequest(body);
+
+  if (!res.ok) {
+    Sketch.UI.message('We were unable to re-authenticate you');
+  }
+
+  return await res.json();
+};
+
+/**
+ * Makes a fetch request to the oauth endpoint
+ */
+const authRequest = async body => {
+  return await fetch(`${API_ENDPOINT}/oauth2/token`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -77,10 +83,4 @@ export const refresh = async () => {
     },
     body: body,
   });
-
-  if (!res.ok) {
-    Sketch.UI.message('We were unable to re-authenticate you');
-  }
-
-  return await res.json();
 };

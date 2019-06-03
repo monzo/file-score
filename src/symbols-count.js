@@ -45,7 +45,7 @@ export default async function onRun() {
   const fileName = path.parse(doc.path).base;
 
   if (fileName) {
-    const trackingRequest = await track({
+    const trackingRequest = track({
       file_name: decodeURI(fileName).replace('.sketch', ''),
       file_id: doc.id,
       score_percentage: symbolsPercentage,
