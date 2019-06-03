@@ -23,7 +23,7 @@
     {
       "name": "on-document-save",
       "script": "./symbols-count.js",
-      "identifier": "on-document-savve",
+      "identifier": "on-document-save",
       "handlers": {
         "actions": {
           "DocumentSaved": "onRun"
@@ -32,7 +32,7 @@
     }
   ],
   "menu": {
-    "title": "💯 File Score (Metrics Version)",
+    "title": "💯 File Score",
     "items": ["symbols-count", "authenticate-for-analytics"]
   }
 }
