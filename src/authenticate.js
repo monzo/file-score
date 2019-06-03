@@ -8,10 +8,10 @@ import {SECRET_NAME, TOKEN_NAME, API_ENDPOINT, CLIENT_ID} from './config';
  */
 export default () => {
   Sketch.UI.getInputFromUser(
-    'Please enter the token beginning "mnzpub."',
+    'Please enter the token beginning "mnz"',
     {
       initialValue: '',
-      description: 'This only needs to be done once',
+      description: 'This is intended for internal use only',
     },
     async (err, value) => {
       if (err) return;
@@ -23,9 +23,9 @@ export default () => {
       if (access_token) {
         Sketch.Settings.setSettingForKey(TOKEN_NAME, access_token);
         Sketch.Settings.setSettingForKey(SECRET_NAME, value);
-        Sketch.UI.message('🗝Token saved');
+        Sketch.UI.message('🗝 Token saved');
       } else {
-        Sketch.UI.message('🤔Hmm we had a problem authenticating you');
+        Sketch.UI.message('🤔 Hmm we had a problem authenticating you');
       }
     }
   );
