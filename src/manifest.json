@@ -2,7 +2,7 @@
   "name": "File Score",
   "description": "A plugin to tell you some stats about how clean your Sketch file is",
   "author": "Monzo",
-  "authorEmail" : "kavi@monzo.com",
+  "authorEmail": "kavi@monzo.com",
   "identifier": "com.monzo.design.file-score",
   "homepage": "https://github.com/monzo/file-score",
   "compatibleVersion": 3,
@@ -14,12 +14,25 @@
       "identifier": "symbols-count",
       "script": "./symbols-count.js",
       "shortcut": "ctrl shift s"
+    },
+    {
+      "name": "Authenticate",
+      "identifier": "authenticate-for-analytics",
+      "script": "./authenticate.js"
+    },
+    {
+      "name": "on-document-save",
+      "script": "./symbols-count.js",
+      "identifier": "on-document-save",
+      "handlers": {
+        "actions": {
+          "DocumentSaved": "onRun"
+        }
+      }
     }
   ],
   "menu": {
     "title": "💯 File Score",
-    "items": [
-      "symbols-count"
-    ]
+    "items": ["symbols-count", "authenticate-for-analytics"]
   }
 }

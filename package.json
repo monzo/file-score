@@ -1,6 +1,6 @@
 {
   "name": "file-score",
-  "version": "0.9.1",
+  "version": "1.0.0",
   "engines": {
     "sketch": ">=3.0"
   },
@@ -23,7 +23,12 @@
     "postinstall": "npm run build && skpm-link"
   },
   "devDependencies": {
-    "@skpm/builder": "^0.5.11"
+    "@skpm/builder": "^0.5.11",
+    "@skpm/path": "^0.1.4",
+    "url-search-params-polyfill": "^6.0.0"
   },
-  "author": "Kavi Dhokia <kavi@monzo.com>"
+  "author": "Kavi Dhokia <kavi@monzo.com>",
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4"
+  }
 }
