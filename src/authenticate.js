@@ -65,7 +65,9 @@ export const refresh = async () => {
   const res = await authRequest(body);
 
   if (!res.ok) {
-    Sketch.UI.message('We were unable to re-authenticate you');
+    Sketch.UI.message(
+      'We were unable to re-authenticate you - Please add the token from 1Password'
+    );
   }
 
   return await res.json();
