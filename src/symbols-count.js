@@ -3,7 +3,6 @@ import path from '@skpm/path';
 import FormData from 'sketch-polyfill-fetch/lib/form-data';
 
 import {SECRET_NAME, TOKEN_NAME, API_ENDPOINT, CLIENT_ID} from './config';
-import {refresh} from './authenticate';
 import track from './track';
 
 const doc = Sketch.getSelectedDocument();

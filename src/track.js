@@ -1,7 +1,7 @@
 import Sketch from 'sketch';
 
 import {SECRET_NAME, TOKEN_NAME, API_ENDPOINT} from './config';
-import {refresh} from './authenticate';
+import {authenticate} from './authenticate';
 
 export default async function track(data) {
   const storedSecret = Sketch.Settings.settingForKey(SECRET_NAME);
@@ -22,7 +22,7 @@ export default async function track(data) {
   if (!res.ok) {
     const {_value} = res.json();
     if (_value.code === 'unauthorized.bad_access_token.expired') {
-      return refresh();
+      return authenticate(storedSecret);
     }
   } else {
     return res;

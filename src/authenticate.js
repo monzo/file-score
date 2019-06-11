@@ -18,11 +18,9 @@ export default () => {
 
       const res = await authenticate(value);
 
-      const {access_token} = res;
+      const {ok} = res;
 
-      if (access_token) {
-        Sketch.Settings.setSettingForKey(TOKEN_NAME, access_token);
-        Sketch.Settings.setSettingForKey(SECRET_NAME, value);
+      if (ok) {
         Sketch.UI.message('🗝 Token saved');
       } else {
         Sketch.UI.message('🤔 Hmm we had a problem authenticating you');
@@ -34,7 +32,7 @@ export default () => {
 /**
  * Token exchange
  */
-export const authenticate = async secret => {
+export const authenticate = async (secret, isRetry = false) => {
   const body = new FormData();
   body.append('grant_type', 'client_credentials');
   body.append('client_id', CLIENT_ID);
@@ -42,35 +40,22 @@ export const authenticate = async secret => {
 
   const res = await authRequest(body);
 
-  if (!res.ok) {
-    await refresh();
+  if (!res.ok && !isRetry) {
+    await authenticate(secret, true);
   }
 
-  return await res.json();
-};
+  const {access_token} = await res.json();
 
-/**
- * Refresh the token
- */
-export const refresh = async () => {
-  const secret = Sketch.Settings.settingForKey(SECRET_NAME);
-  const refreshToken = Sketch.Settings.settingForKey(TOKEN_NAME);
-
-  const body = new FormData();
-  body.append('grant_type', 'refesh_token');
-  body.append('client_id', CLIENT_ID);
-  body.append('refresh_token', refreshToken);
-  body.append('client_secret', secret);
-
-  const res = await authRequest(body);
-
-  if (!res.ok) {
-    Sketch.UI.message(
-      'We were unable to re-authenticate you - Please add the token from 1Password'
-    );
+  if (access_token) {
+    Sketch.Settings.setSettingForKey(TOKEN_NAME, access_token);
+    return {
+      ok: true,
+    };
+  } else {
+    return {
+      ok: false,
+    };
   }
-
-  return await res.json();
 };
 
 /**
